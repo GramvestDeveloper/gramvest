@@ -1507,16 +1507,19 @@ async function init() {
 
   if (session) {
     STATE.user = session.user;
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('app').style.display       = 'block';
     await bootApp();
   } else {
     document.getElementById('loginPage').style.display = 'flex';
     document.getElementById('app').style.display       = 'none';
   }
 
-  // Listener untuk perubahan auth state (login/logout dari tab lain)
   db.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session) {
       STATE.user = session.user;
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('app').style.display       = 'block';
       await bootApp();
     } else if (event === 'SIGNED_OUT') {
       STATE.user         = null;
@@ -1526,8 +1529,17 @@ async function init() {
       STATE.todayPrices  = {};
       document.getElementById('app').style.display       = 'none';
       document.getElementById('loginPage').style.display = 'flex';
+      switchAuthTab('login');
     }
   });
+
+  const modalOv = document.getElementById('modalOv');
+  if (modalOv) {
+    modalOv.addEventListener('click', function (e) {
+      if (e.target === this) closeModal();
+    });
+  }
+}
 
   // Tutup modal saat klik overlay
   const modalOv = document.getElementById('modalOv');

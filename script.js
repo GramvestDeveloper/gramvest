@@ -1531,15 +1531,22 @@ async function init() {
       document.getElementById('app').style.display       = 'block';
       await bootApp();
     } else if (event === 'SIGNED_OUT') {
-      STATE.user         = null;
-      STATE.profile      = null;
-      STATE.transactions = [];
-      STATE.goldPrices   = [];
-      STATE.todayPrices  = {};
-      document.getElementById('app').style.display       = 'none';
-      document.getElementById('loginPage').style.display = 'flex';
-      switchAuthTab('login');
-    }
+  STATE.user         = null;
+  STATE.profile      = null;
+  STATE.transactions = [];
+  STATE.goldPrices   = [];
+  STATE.todayPrices  = {};
+
+  // Bersihkan form
+  const emailEl = document.getElementById('loginEmail');
+  const passEl  = document.getElementById('loginPassword');
+  if (emailEl) emailEl.value = '';
+  if (passEl)  passEl.value  = '';
+
+  document.getElementById('app').style.display       = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
+  switchAuthTab('login');
+}
   });
 
   const modalOv = document.getElementById('modalOv');

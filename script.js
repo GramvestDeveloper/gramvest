@@ -267,13 +267,14 @@ async function doRegister() {
  * db.auth.signOut()
  */
 async function doLogout() {
-  // Tampilkan loading di tombol logout
   const logoutBtn = document.querySelector('.sb-logout');
   if (logoutBtn) {
-    logoutBtn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;"></div>';
+    logoutBtn.innerHTML = '<div style="width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></div>';
     logoutBtn.style.pointerEvents = 'none';
   }
 
+  // Beri waktu spinner terlihat
+  await new Promise(r => setTimeout(r, 800));
   await db.auth.signOut();
 
   STATE.user         = null;
@@ -282,19 +283,11 @@ async function doLogout() {
   STATE.goldPrices   = [];
   STATE.todayPrices  = {};
 
-  // Bersihkan form login
   document.getElementById('loginEmail').value    = '';
   document.getElementById('loginPassword').value = '';
-
   document.getElementById('app').style.display       = 'none';
   document.getElementById('loginPage').style.display = 'flex';
   switchAuthTab('login');
-
-  // Kembalikan ikon logout
-  if (logoutBtn) {
-    logoutBtn.innerHTML = '<svg width="16" height="16"><use href="#ic-logout"/></svg>';
-    logoutBtn.style.pointerEvents = '';
-  }
 }
 /* ─────────────────────────────────────────────────────────────
    [5] NAVIGATION & UI SHELL

@@ -23,7 +23,7 @@
    [1] CONFIG & CLIENT
    Ganti nilai SUPABASE_URL dan SUPABASE_ANON_KEY sebelum deploy.
    ───────────────────────────────────────────────────────────── */
-const SUPABASE_URL  = 'https://imlzrmbazuwdtpzqapsv.supabase.co/rest/v1/';
+const SUPABASE_URL  = 'https://imlzrmbazuwdtpzqapsv.supabase.co/rest/';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImltbHpybWJhenV3ZHRwenFhcHN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MTQ1NzcsImV4cCI6MjA5NjM5MDU3N30.BjoKKbrH4AffuLbuIFi6qsVcWuk1AZq75MdOcXnwXwg';
 
 // Supabase CDN (pastikan script tag CDN ada di HTML, atau gunakan bundler)

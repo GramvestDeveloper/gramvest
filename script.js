@@ -269,12 +269,11 @@ async function doRegister() {
 async function doLogout() {
   const logoutBtn = document.querySelector('.sb-logout');
   if (logoutBtn) {
-    logoutBtn.innerHTML = '<div style="width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></div>';
+    logoutBtn.innerHTML = '<div class="logout-spinner"></div>';
     logoutBtn.style.pointerEvents = 'none';
   }
 
-  // Beri waktu spinner terlihat
-  await new Promise(r => setTimeout(r, 800));
+  await new Promise(r => setTimeout(r, 900));
   await db.auth.signOut();
 
   STATE.user         = null;

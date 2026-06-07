@@ -26,19 +26,16 @@
 const SUPABASE_URL  = 'https://imlzrmbazuwdtpzqapsv.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImltbHpybWJhenV3ZHRwenFhcHN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MTQ1NzcsImV4cCI6MjA5NjM5MDU3N30.BjoKKbrH4AffuLbuIFi6qsVcWuk1AZq75MdOcXnwXwg';
 
-let supabase;
-try {
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-} catch(e) {
-  console.error('Supabase gagal init:', e);
-}
+// Supabase CDN (pastikan script tag CDN ada di HTML, atau gunakan bundler)
+// <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* ─────────────────────────────────────────────────────────────
    [2] STATE
    Cache data di memori agar tidak terjadi query duplikat.
    ───────────────────────────────────────────────────────────── */
 const STATE = {
-  user:         null,   // supabase.auth.User
+  user:         null,   // db.auth.User
   profile:      null,   // row dari tabel profiles
   transactions: [],     // semua transaksi user
   goldPrices:   [],     // gold_prices 7 hari terakhir
@@ -172,7 +169,7 @@ function switchAuthTab(tab) {
 
 /**
  * Login
- * supabase.auth.signInWithPassword({ email, password })
+ * db.auth.signInWithPassword({ email, password })
  */
 async function doLogin() {
   const email    = document.getElementById('loginEmail').value.trim();
@@ -191,7 +188,7 @@ async function doLogin() {
   btn.classList.add('loading');
   btn.disabled = true;
 
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await db.auth.signInWithPassword({ email, password });
 
   btn.classList.remove('loading');
   btn.disabled = false;
@@ -208,7 +205,7 @@ async function doLogin() {
 
 /**
  * Register
- * supabase.auth.signUp({ email, password })
+ * db.auth.signUp({ email, password })
  * Trigger PostgreSQL otomatis membuat row di profiles
  */
 async function doRegister() {
@@ -240,7 +237,7 @@ async function doRegister() {
   btn.classList.add('loading');
   btn.disabled = true;
 
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await db.auth.signUp({ email, password });
 
   if (error) {
     btn.classList.remove('loading');
@@ -252,7 +249,7 @@ async function doRegister() {
 
   // Update full_name ke profiles setelah trigger membuat row
   if (data.user) {
-    await supabase
+    await db
       .from('profiles')
       .update({ full_name: name })
       .eq('id', data.user.id);
@@ -267,10 +264,10 @@ async function doRegister() {
 
 /**
  * Logout
- * supabase.auth.signOut()
+ * db.auth.signOut()
  */
 async function doLogout() {
-  await supabase.auth.signOut();
+  await db.auth.signOut();
   STATE.user         = null;
   STATE.profile      = null;
   STATE.transactions = [];
@@ -801,7 +798,7 @@ function renderDonut(rows, totGram) {
  * SELECT * FROM transactions WHERE user_id = auth.uid() ORDER BY date DESC
  */
 async function fetchTransactions() {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('transactions')
     .select('*')
     .order('date', { ascending: false });
@@ -915,7 +912,7 @@ async function saveTransaction() {
   const btn = document.getElementById('modalSaveBtn');
   btn.disabled = true;
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('transactions')
     .insert([{
       user_id: STATE.user.id,
@@ -961,7 +958,7 @@ async function updateTransaction() {
   const btn = document.getElementById('modalSaveBtn');
   btn.disabled = true;
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('transactions')
     .update({ date, product, gram, price_per_gram, notes: notes || null })
     .eq('id', id)
@@ -990,7 +987,7 @@ async function updateTransaction() {
 async function deleteTransaction(id) {
   if (!confirm('Hapus transaksi ini?')) return;
 
-  const { error } = await supabase
+  const { error } = await db
     .from('transactions')
     .delete()
     .eq('id', id);
@@ -1018,7 +1015,7 @@ async function fetchGoldPrices() {
   const today = new Date().toISOString().split('T')[0];
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('gold_prices')
     .select('*')
     .gte('date', sevenDaysAgo)
@@ -1206,7 +1203,7 @@ function renderPriceHistoryTable() {
 
 /* ─────────────────────────────────────────────────────────────
    [10] PROFILE
-   Supabase: SELECT/UPDATE profiles, supabase.auth.updateUser
+   Supabase: SELECT/UPDATE profiles, db.auth.updateUser
    ───────────────────────────────────────────────────────────── */
 
 /**
@@ -1214,7 +1211,7 @@ function renderPriceHistoryTable() {
  * SELECT * FROM profiles WHERE id = auth.uid()
  */
 async function fetchProfile() {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('profiles')
     .select('*')
     .eq('id', STATE.user.id)
@@ -1276,7 +1273,7 @@ async function saveProfile() {
     return;
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('profiles')
     .update({ full_name, phone: phone || null })
     .eq('id', STATE.user.id)
@@ -1312,7 +1309,7 @@ async function saveProfileTarget() {
     return;
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('profiles')
     .update({ portfolio_name: portfolio_name || 'Portofolio Utama', target_gram, monthly_buy })
     .eq('id', STATE.user.id)
@@ -1331,7 +1328,7 @@ async function saveProfileTarget() {
 
 /**
  * Ganti password
- * supabase.auth.updateUser({ password: newPassword })
+ * db.auth.updateUser({ password: newPassword })
  */
 async function changePassword() {
   const current  = document.getElementById('profCurrentPassword')?.value;
@@ -1348,8 +1345,8 @@ async function changePassword() {
   }
 
   // Supabase tidak memverifikasi password lama via client.
-  // Untuk re-auth sebelum update, gunakan supabase.auth.signInWithPassword terlebih dahulu.
-  const { error } = await supabase.auth.updateUser({ password: newPass });
+  // Untuk re-auth sebelum update, gunakan db.auth.signInWithPassword terlebih dahulu.
+  const { error } = await db.auth.updateUser({ password: newPass });
 
   if (error) {
     showToast('Gagal mengganti password: ' + error.message, true);
@@ -1505,7 +1502,7 @@ async function bootApp() {
 
 /** Entry point — cek session Supabase saat halaman dimuat */
 async function init() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await db.auth.getSession();
 
   if (session) {
     STATE.user = session.user;
@@ -1516,7 +1513,7 @@ async function init() {
   }
 
   // Listener untuk perubahan auth state (login/logout dari tab lain)
-  supabase.auth.onAuthStateChange(async (event, session) => {
+  db.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session) {
       STATE.user = session.user;
       await bootApp();

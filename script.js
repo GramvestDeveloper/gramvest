@@ -1548,7 +1548,6 @@ async function init() {
       if (e.target === this) closeModal();
     });
   }
-
 // Jalankan init setelah DOM siap
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);

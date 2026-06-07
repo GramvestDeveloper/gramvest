@@ -26,10 +26,12 @@
 const SUPABASE_URL  = 'https://imlzrmbazuwdtpzqapsv.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImltbHpybWJhenV3ZHRwenFhcHN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MTQ1NzcsImV4cCI6MjA5NjM5MDU3N30.BjoKKbrH4AffuLbuIFi6qsVcWuk1AZq75MdOcXnwXwg';
 
-// Supabase CDN (pastikan script tag CDN ada di HTML, atau gunakan bundler)
-// <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-const { createClient } = window.supabase;
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let supabase;
+try {
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} catch(e) {
+  console.error('Supabase gagal init:', e);
+}
 
 /* ─────────────────────────────────────────────────────────────
    [2] STATE

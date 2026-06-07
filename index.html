@@ -78,7 +78,7 @@
      Supabase: supabase.auth.signInWithPassword({ email, password })
      Tampilkan loginPage jika !session, sembunyikan jika session aktif
      ══════════════════════════════════════════════ -->
-<div id="loginPage">
+<div id="loginPage" style="display:none;">
 <div class="l-left">
   <div class="l-brand">
     <div class="l-brand-icon">
@@ -157,7 +157,7 @@
      APP SHELL
      Tampilkan setelah supabase.auth.getSession() confirm aktif
      ══════════════════════════════════════════════ -->
-<div id="app">
+<div id="app" style="display:none;">
 <div class="app-wrap">
 
   <div class="sb-overlay" id="sbOv" onclick="closeSb()"></div>

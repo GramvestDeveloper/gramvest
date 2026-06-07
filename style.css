@@ -474,3 +474,11 @@ textarea.fi2{min-height:72px;resize:vertical;}
 @media(max-width:420px){
   .price-main-grid{grid-template-columns:1fr;}
 }
+.logout-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}

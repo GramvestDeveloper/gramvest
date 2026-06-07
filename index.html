@@ -966,15 +966,11 @@
   <span id="toastMsg">Berhasil disimpan</span>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="script.js"></script>
 <script>
-  window.onload = function() {
-    if (typeof doLogin === 'undefined') {
-      alert('script.js GAGAL dimuat');
-    } else {
-      alert('script.js berhasil dimuat');
-    }
-  }
+  window.onerror = function(msg, src, line, col, err) {
+    alert('ERROR: ' + msg + '\nFile: ' + src + '\nBaris: ' + line);
+  };
 </script>
+<script src="script.js"></script>
 </body>
 </html>

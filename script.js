@@ -274,8 +274,9 @@ async function doLogout() {
   STATE.goldPrices   = [];
   STATE.todayPrices  = {};
 
-  document.getElementById('app').style.display      = 'none';
+  document.getElementById('app').style.display       = 'none';
   document.getElementById('loginPage').style.display = 'flex';
+  switchAuthTab('login');
 }
 
 /* ─────────────────────────────────────────────────────────────

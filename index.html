@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GramVest — Gold Investment Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SVG ICON SPRITES -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+  <symbol id="ic-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+    <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+  </symbol>
+  <symbol id="ic-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+    <line x1="12" y1="12" x2="12" y2="12"/>
+  </symbol>
+  <symbol id="ic-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+    <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
+    <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+  </symbol>
+  <symbol id="ic-trending" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+  </symbol>
+  <symbol id="ic-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+  </symbol>
+  <symbol id="ic-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+    <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+  </symbol>
+  <symbol id="ic-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+  </symbol>
+  <symbol id="ic-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </symbol>
+  <symbol id="ic-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="8"/><path d="M12 6v6l4 2"/>
+  </symbol>
+  <symbol id="ic-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+  </symbol>
+  <symbol id="ic-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+  </symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </symbol>
+  <symbol id="ic-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+  </symbol>
+  <symbol id="ic-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+  </symbol>
+  <symbol id="ic-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+    <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+  </symbol>
+  <symbol id="ic-bar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+    <line x1="6" y1="20" x2="6" y2="14"/>
+  </symbol>
+  <symbol id="ic-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/>
+    <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 9 14"/>
+  </symbol>
+</svg>
+
+<!-- ══════════════════════════════════════════════
+     LOGIN PAGE
+     Supabase: supabase.auth.signInWithPassword({ email, password })
+     Tampilkan loginPage jika !session, sembunyikan jika session aktif
+     ══════════════════════════════════════════════ -->
+<div id="loginPage">
+<div class="l-left">
+  <div class="l-brand">
+    <div class="l-brand-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3A0A12" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M8 12h8M12 8v8"/></svg>
+    </div>
+    <div class="l-brand-name">Gram<span>Vest</span></div>
+  </div>
+  <div class="l-hero">
+    <h1>Investasi Emas<br>Lebih <em>Cerdas</em><br>& Terukur</h1>
+    <p>Pantau aset emas Anda, hitung profit otomatis, dan raih target akumulasi gram dengan strategi DCA yang terstruktur.</p>
+  </div>
+  <div class="l-stats">
+    <div><div class="l-stat-n">+16%</div><div class="l-stat-l">Rata-rata ROI</div></div>
+    <div><div class="l-stat-n">6 Produk</div><div class="l-stat-l">Emas Didukung</div></div>
+    <div><div class="l-stat-n">Live</div><div class="l-stat-l">Harga Emas</div></div>
+  </div>
+</div>
+<div class="l-right">
+  <div class="l-form">
+    <!-- ── LOGIN FORM ── -->
+    <!-- Supabase: supabase.auth.signInWithPassword({ email, password }) -->
+    <div id="loginForm">
+      <h2>Masuk ke Akun</h2>
+      <p>Selamat datang kembali di GramVest</p>
+      <div id="loginError" class="form-error" style="display:none;"></div>
+      <div class="fg">
+        <label class="fl">Alamat Email</label>
+        <input class="fi" type="email" placeholder="nama@email.com" id="loginEmail" autocomplete="email">
+      </div>
+      <div class="fg">
+        <label class="fl">Password</label>
+        <input class="fi" type="password" placeholder="••••••••" id="loginPassword" autocomplete="current-password">
+      </div>
+      <button class="btn-login" id="loginBtn" onclick="switchAuthTab('login')">
+        <span class="btn-login-text">Masuk Sekarang</span>
+        <div class="spinner"></div>
+      </button>
+      <div class="l-footer">Belum punya akun? <a href="#" onclick="switchAuthTab('register')">Daftar Gratis</a></div>
+    </div>
+
+    <!-- ── REGISTER FORM ── -->
+    <!-- Supabase: supabase.auth.signUp({ email, password })
+         Trigger PostgreSQL otomatis membuat row di profiles -->
+    <div id="registerForm" style="display:none;">
+      <h2>Buat Akun Baru</h2>
+      <p>Mulai perjalanan investasi emas Anda</p>
+      <div id="registerError" class="form-error" style="display:none;"></div>
+      <div class="fg">
+        <label class="fl">Nama Lengkap</label>
+        <input class="fi" type="text" placeholder="Nama Anda" id="registerName" autocomplete="name">
+      </div>
+      <div class="fg">
+        <label class="fl">Alamat Email</label>
+        <input class="fi" type="email" placeholder="nama@email.com" id="registerEmail" autocomplete="email">
+      </div>
+      <div class="fg">
+        <label class="fl">Password</label>
+        <input class="fi" type="password" placeholder="Min. 8 karakter" id="registerPassword" autocomplete="new-password">
+      </div>
+      <div class="fg">
+        <label class="fl">Konfirmasi Password</label>
+        <input class="fi" type="password" placeholder="Ulangi password" id="registerPasswordConfirm" autocomplete="new-password">
+      </div>
+      <button class="btn-login" id="registerBtn" onclick="doRegister()">
+        <span class="btn-login-text">Daftar Sekarang</span>
+        <div class="spinner"></div>
+      </button>
+      <div class="l-footer">Sudah punya akun? <a href="#" onclick="switchAuthTab('login')">Masuk</a></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     APP SHELL
+     Tampilkan setelah supabase.auth.getSession() confirm aktif
+     ══════════════════════════════════════════════ -->
+<div id="app">
+<div class="app-wrap">
+
+  <div class="sb-overlay" id="sbOv" onclick="closeSb()"></div>
+
+  <aside class="sidebar" id="sb">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A0A12" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M8 12h8M12 8v8"/></svg>
+      </div>
+      <div class="sb-logo-name">Gram<span>Vest</span></div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Menu Utama</div>
+      <button class="nav-item active" onclick="goPage('dashboard',this)">
+        <span class="icon"><svg width="16" height="16"><use href="#ic-grid"/></svg></span>
+        Dashboard
+      </button>
+      <button class="nav-item" onclick="goPage('portfolio',this)">
+        <span class="icon"><svg width="16" height="16"><use href="#ic-briefcase"/></svg></span>
+        Portofolio
+      </button>
+      <button class="nav-item" onclick="goPage('transactions',this)">
+        <span class="icon"><svg width="16" height="16"><use href="#ic-list"/></svg></span>
+        Transaksi
+        <!-- Supabase: SELECT COUNT(*) FROM transactions WHERE user_id = auth.uid() -->
+        <span class="nav-badge" id="navTxCount">0</span>
+      </button>
+      <div class="sb-section">Informasi</div>
+      <button class="nav-item" onclick="goPage('prices',this)">
+        <span class="icon"><svg width="16" height="16"><use href="#ic-trending"/></svg></span>
+        Harga Emas
+      </button>
+      <button class="nav-item" onclick="goPage('profile',this)">
+        <span class="icon"><svg width="16" height="16"><use href="#ic-user"/></svg></span>
+        Profil
+      </button>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-user">
+        <!-- Supabase: supabase.auth.getUser() → profiles.full_name -->
+        <div class="sb-avatar" id="sbAvatar">--</div>
+        <div style="flex:1;min-width:0;">
+          <div class="sb-uname" id="sbUserName">Memuat...</div>
+          <div class="sb-urole">Investor Emas</div>
+        </div>
+        <div class="sb-logout" onclick="doLogout()">
+          <svg width="16" height="16"><use href="#ic-logout"/></svg>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-btn" onclick="openSb()">
+        <svg width="22" height="22"><use href="#ic-menu"/></svg>
+      </button>
+      <div class="topbar-title" id="tbTitle">Dashboard</div>
+      <button class="topbar-add" onclick="openModal()">
+        <svg width="14" height="14"><use href="#ic-plus"/></svg>
+        <span>Transaksi</span>
+      </button>
+    </div>
+
+    <div class="content">
+
+      <!-- ══════════════════════════════════════════════
+           DASHBOARD
+           Data: aggregate dari transactions WHERE user_id = auth.uid()
+           + gold_prices WHERE date = CURRENT_DATE
+           + profiles WHERE id = auth.uid()
+           ══════════════════════════════════════════════ -->
+      <div class="page active" id="pg-dashboard">
+        <div class="greeting">
+          <h2 id="greetingText">Memuat...</h2>
+          <p id="dateText"></p>
+        </div>
+
+        <!-- KPI Grid
+             Sumber: SUM(gram), SUM(gram*price_per_gram), SUM(gram*current_price) dari transactions
+             JOIN gold_prices ON product = product AND date = CURRENT_DATE -->
+        <div class="kpi-grid">
+          <div class="kpi feat">
+            <div class="kpi-lbl">Total Gram</div>
+            <!-- transactions: SUM(gram) WHERE user_id = auth.uid() -->
+            <div class="kpi-val"><span id="kpiTotalGram">0</span> <small>gr</small></div>
+            <!-- COUNT(DISTINCT product) -->
+            <div class="kpi-sub" id="kpiProductCount">0 produk emas</div>
+            <div class="badge" style="background:rgba(255,255,255,.18);color:#fff;margin-top:10px;">
+              <svg width="11" height="11"><use href="#ic-trending"/></svg>
+              <!-- SUM(gram) WHERE date >= date_trunc('month', CURRENT_DATE) -->
+              <span id="kpiMonthlyGram">+0 gr bulan ini</span>
+            </div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-lbl">Total Modal</div>
+            <!-- SUM(gram * price_per_gram) -->
+            <div class="kpi-val" id="kpiTotalModal">Rp 0</div>
+            <!-- MIN(date) dari transactions user -->
+            <div class="kpi-sub" id="kpiDcaSince">DCA sejak —</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-lbl">Nilai Saat Ini</div>
+            <!-- SUM(gram * gold_prices.sell_price) per product JOIN gold_prices latest date -->
+            <div class="kpi-val" id="kpiNilaiKini">Rp 0</div>
+            <div class="badge badge-green" style="margin-top:8px;">
+              <svg width="11" height="11"><use href="#ic-trending"/></svg>
+              <!-- Nilai Kini - Total Modal -->
+              <span id="kpiNilaiChange">+Rp 0</span>
+            </div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-lbl">Profit Bersih</div>
+            <!-- Nilai Kini - Total Modal -->
+            <div class="kpi-val" id="kpiProfit" style="color:var(--green);">Rp 0</div>
+            <div class="badge badge-green" style="margin-top:8px;" id="kpiProfitBadge">—</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-lbl">ROI</div>
+            <!-- ((Nilai Kini - Modal) / Modal) * 100 -->
+            <div class="kpi-val" id="kpiRoi" style="color:var(--c);">0%</div>
+            <div class="kpi-sub">Return on Investment</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-lbl">Average Cost</div>
+            <!-- SUM(gram * price_per_gram) / SUM(gram) -->
+            <div class="kpi-val" id="kpiAvgCost">0 <small>Jt/gr</small></div>
+            <div class="kpi-sub">Per gram rata-rata</div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="dash-l">
+            <div class="card">
+              <div class="card-hd">
+                <div class="card-ttl">
+                  <svg width="16" height="16"><use href="#ic-bar"/></svg>
+                  Modal vs Nilai Portofolio
+                </div>
+                <!-- Filter: ubah range query di JS → re-render chart -->
+                <select class="filter-sel" id="chartRangeFilter" style="min-width:unset;padding:6px 10px;font-size:12px;width:auto;" onchange="renderPortfolioChart()">
+                  <option value="6">6 Bulan</option>
+                  <option value="12">12 Bulan</option>
+                  <option value="all">Semua</option>
+                </select>
+              </div>
+              <div class="card-bd">
+                <!-- Supabase: monthly SUM(gram*price_per_gram) AS modal
+                     dan SUM(gram * gold_prices.sell_price) AS nilai_kini
+                     GROUP BY date_trunc('month', transactions.date)
+                     Data dirender ulang oleh renderPortfolioChart() -->
+                <div class="chart-wrap">
+                  <!-- SVG chart dirender dinamis oleh JS: id="portfolioChartSvg" -->
+                  <svg id="portfolioChartSvg" viewBox="0 0 660 190" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                      <linearGradient id="gModal" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#7B1426" stop-opacity=".20"/>
+                        <stop offset="100%" stop-color="#7B1426" stop-opacity="0"/>
+                      </linearGradient>
+                      <linearGradient id="gNilai" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#C6973F" stop-opacity=".25"/>
+                        <stop offset="100%" stop-color="#C6973F" stop-opacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    <line x1="0" y1="150" x2="660" y2="150" stroke="#E8E4DD" stroke-width="1"/>
+                    <line x1="0" y1="110" x2="660" y2="110" stroke="#E8E4DD" stroke-width="1" stroke-dasharray="4,4"/>
+                    <line x1="0" y1="70"  x2="660" y2="70"  stroke="#E8E4DD" stroke-width="1" stroke-dasharray="4,4"/>
+                    <line x1="0" y1="30"  x2="660" y2="30"  stroke="#E8E4DD" stroke-width="1" stroke-dasharray="4,4"/>
+                    <!-- path dirender oleh renderPortfolioChart() -->
+                    <path id="chartPathModalFill" d="" fill="url(#gModal)"/>
+                    <path id="chartPathModalLine" d="" fill="none" stroke="#7B1426" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path id="chartPathNilaiFill" d="" fill="url(#gNilai)"/>
+                    <path id="chartPathNilaiLine" d="" fill="none" stroke="#C6973F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7,3"/>
+                    <!-- Label bulan dirender oleh JS ke dalam group #chartLabels -->
+                    <g id="chartLabels"></g>
+                  </svg>
+                </div>
+                <div class="chart-legend">
+                  <div class="legend-item"><div class="legend-line" style="background:#7B1426;"></div> Modal</div>
+                  <div class="legend-item"><div class="legend-line" style="background:#C6973F;border-top:2px dashed #C6973F;height:0;"></div> Nilai Portfolio</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-hd">
+                <div class="card-ttl"><svg width="16" height="16"><use href="#ic-list"/></svg> Transaksi Terakhir</div>
+                <a class="card-link" onclick="goPage('transactions',null)">Lihat Semua →</a>
+              </div>
+              <div class="card-bd" style="padding-top:6px;">
+                <!-- Supabase: SELECT id, date, product, gram, price_per_gram
+                     FROM transactions WHERE user_id = auth.uid()
+                     ORDER BY date DESC LIMIT 5
+                     Dirender oleh renderRecentTransactions() -->
+                <div id="recentTxList">
+                  <!-- Placeholder saat loading -->
+                  <div class="tx-row" style="opacity:.4;">
+                    <div class="tx-ico a"></div>
+                    <div style="flex:1"><div class="tx-name">Memuat...</div><div class="tx-date">—</div></div>
+                    <div style="text-align:right"><div class="tx-gr">— gr</div><div class="tx-pr">Rp —</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- /dash-l -->
+
+          <div class="dash-r">
+            <div class="insight" id="dashInsight">
+              <div class="insight-ico">
+                <svg width="18" height="18" fill="none" stroke="#3A0A12" stroke-width="2"><use href="#ic-bulb"/></svg>
+              </div>
+              <div>
+                <!-- Teks insight dirender dinamis berdasarkan nilai ROI -->
+                <div class="insight-ttl" id="insightTitle">—</div>
+                <div class="insight-txt" id="insightText">Memuat data portofolio...</div>
+              </div>
+            </div>
+
+            <div class="target-card">
+              <div class="target-hd">
+                <div class="target-ttl"><svg width="14" height="14" style="vertical-align:-2px;"><use href="#ic-target"/></svg> Target Akumulasi</div>
+                <!-- (kpiTotalGram / profiles.target_gram) * 100 -->
+                <div class="target-pct" id="targetPct">0%</div>
+              </div>
+              <!-- Supabase: profiles.target_gram WHERE id = auth.uid() -->
+              <div class="prog-bar"><div class="prog-fill" id="pf1" style="width:0%"></div></div>
+              <div class="target-inf">
+                <!-- profiles.target_gram -->
+                <div class="ti"><small>Target</small><span id="targetGramVal">0 gr</span></div>
+                <!-- SUM(transactions.gram) -->
+                <div class="ti mid"><small>Saat Ini</small><span id="targetCurrentGram">0 gr</span></div>
+                <!-- target_gram - SUM(gram) -->
+                <div class="ti r"><small>Sisa</small><span id="targetSisaGram">0 gr</span></div>
+              </div>
+            </div>
+
+            <div class="est-card">
+              <div class="est-ttl"><svg width="13" height="13" style="vertical-align:-2px;fill:none;stroke:#fff;stroke-width:2;"><use href="#ic-clock"/></svg> Estimasi Target</div>
+              <!-- profiles.target_gram -->
+              <div class="est-row"><span class="est-lbl">Target</span><span class="est-val" id="estTargetGram">0 gram</span></div>
+              <!-- profiles.monthly_buy -->
+              <div class="est-row"><span class="est-lbl">Rata-rata beli</span><span class="est-val" id="estMonthlyBuy">0 gr/bulan</span></div>
+              <!-- target_gram - SUM(gram) -->
+              <div class="est-row"><span class="est-lbl">Sisa gram</span><span class="est-val" id="estSisaGram">0 gram</span></div>
+              <div class="est-divider"></div>
+              <!-- Math.ceil(sisa / monthly_buy) bulan dari sekarang -->
+              <div class="est-row"><span class="est-lbl">Estimasi tercapai</span><span class="est-big" id="estTercapai">—</span></div>
+            </div>
+
+            <div class="card">
+              <div class="card-hd">
+                <div class="card-ttl"><svg width="14" height="14"><use href="#ic-trending"/></svg> Harga Emas</div>
+                <a class="card-link" onclick="goPage('prices',null)">Detail</a>
+              </div>
+              <!-- Supabase: SELECT product, sell_price, buyback_price
+                   FROM gold_prices WHERE date = CURRENT_DATE
+                   Dirender oleh renderSidebarPrices() -->
+              <div class="card-bd" style="padding:12px 16px;" id="sidebarPriceList">
+                <!-- Antam -->
+                <div class="price-row">
+                  <div class="price-ico" style="background:#FFF0E0;"><svg width="14" height="14" fill="none" stroke="#C25000" stroke-width="2"><use href="#ic-gold"/></svg></div>
+                  <div style="flex:1"><div style="font-size:13px;font-weight:600;">Antam</div><div style="font-size:11px;color:var(--t3);">BB: <span id="priceAntamBb">Rp —</span></div></div>
+                  <div style="font-size:13px;font-weight:700;color:var(--c);" id="priceAntamSell">Rp —</div>
+                </div>
+                <!-- UBS -->
+                <div class="price-row">
+                  <div class="price-ico" style="background:#E8F0FE;"><svg width="14" height="14" fill="none" stroke="#0B3D91" stroke-width="2"><use href="#ic-gold"/></svg></div>
+                  <div style="flex:1"><div style="font-size:13px;font-weight:600;">UBS</div><div style="font-size:11px;color:var(--t3);">BB: <span id="priceUbsBb">Rp —</span></div></div>
+                  <div style="font-size:13px;font-weight:700;color:var(--c);" id="priceUbsSell">Rp —</div>
+                </div>
+                <!-- Galeri24 -->
+                <div class="price-row">
+                  <div class="price-ico" style="background:#F5EDFB;"><svg width="14" height="14" fill="none" stroke="#6A0DAD" stroke-width="2"><use href="#ic-gold"/></svg></div>
+                  <div style="flex:1"><div style="font-size:13px;font-weight:600;">Galeri24</div><div style="font-size:11px;color:var(--t3);">BB: <span id="priceGaleri24Bb">Rp —</span></div></div>
+                  <div style="font-size:13px;font-weight:700;color:var(--c);" id="priceGaleri24Sell">Rp —</div>
+                </div>
+                <!-- Pegadaian -->
+                <div class="price-row">
+                  <div class="price-ico" style="background:#E8F5E9;"><svg width="14" height="14" fill="none" stroke="#2E7D32" stroke-width="2"><use href="#ic-gold"/></svg></div>
+                  <div style="flex:1"><div style="font-size:13px;font-weight:600;">Pegadaian</div><div style="font-size:11px;color:var(--t3);">BB: <span id="pricePegadaianBb">Rp —</span></div></div>
+                  <div style="font-size:13px;font-weight:700;color:var(--c);" id="pricePegadaianSell">Rp —</div>
+                </div>
+                <!-- Treasury -->
+                <div class="price-row">
+                  <div class="price-ico" style="background:#E3F2FD;"><svg width="14" height="14" fill="none" stroke="#0277BD" stroke-width="2"><use href="#ic-gold"/></svg></div>
+                  <div style="flex:1"><div style="font-size:13px;font-weight:600;">Treasury</div><div style="font-size:11px;color:var(--t3);">BB: <span id="priceTreasuryBb">Rp —</span></div></div>
+                  <div style="font-size:13px;font-weight:700;color:var(--c);" id="priceTreasurySell">Rp —</div>
+                </div>
+                <!-- EmasKita -->
+                <div class="price-row" style="border:none;">
+                  <div class="price-ico" style="background:#FFF8E1;"><svg width="14" height="14" fill="none" stroke="#F57F17" stroke-width="2"><use href="#ic-gold"/></svg></div>
+                  <div style="flex:1"><div style="font-size:13px;font-weight:600;">EmasKita</div><div style="font-size:11px;color:var(--t3);">BB: <span id="priceEmaskitaBb">Rp —</span></div></div>
+                  <div style="font-size:13px;font-weight:700;color:var(--c);" id="priceEmaskitaSell">Rp —</div>
+                </div>
+              </div>
+            </div>
+          </div><!-- /dash-r -->
+        </div><!-- /dash-grid -->
+      </div><!-- /pg-dashboard -->
+
+      <!-- ══════════════════════════════════════════════
+           PORTFOLIO
+           Supabase: SELECT product, SUM(gram) AS total_gram,
+             SUM(gram * price_per_gram) AS modal,
+             SUM(gram * gp.sell_price) AS nilai_kini
+           FROM transactions t
+           LEFT JOIN gold_prices gp ON gp.product = t.product AND gp.date = CURRENT_DATE
+           WHERE t.user_id = auth.uid()
+           GROUP BY product
+           Dirender oleh renderPortfolio()
+           ══════════════════════════════════════════════ -->
+      <div class="page" id="pg-portfolio">
+        <div class="section-hd">
+          <!-- profiles.portfolio_name -->
+          <div class="section-ttl" id="portfolioPageTitle">Portofolio Saya</div>
+          <button class="btn btn-p" onclick="openModal()">
+            <svg width="13" height="13"><use href="#ic-plus"/></svg> Tambah
+          </button>
+        </div>
+
+        <!-- Portfolio Summary Cards
+             Supabase: aggregate dari transactions + gold_prices WHERE user_id = auth.uid() -->
+        <div class="sum-grid">
+          <div class="sum-card">
+            <div class="sum-lbl">Total Gram</div>
+            <!-- SUM(gram) -->
+            <div class="sum-val gld" id="pfSumGram">0 gr</div>
+            <!-- COUNT(DISTINCT product) -->
+            <div class="sum-sub" id="pfSumProductCount">0 produk berbeda</div>
+          </div>
+          <div class="sum-card">
+            <div class="sum-lbl">Total Modal</div>
+            <!-- SUM(gram * price_per_gram) -->
+            <div class="sum-val" id="pfSumModal">Rp 0</div>
+            <!-- MIN(date) dari transactions user -->
+            <div class="sum-sub" id="pfSumDcaSince">DCA sejak —</div>
+          </div>
+          <div class="sum-card">
+            <div class="sum-lbl">Profit Bersih</div>
+            <!-- nilai_kini - modal -->
+            <div class="sum-val g" id="pfSumProfit">+Rp 0</div>
+            <!-- SUM(gram * sell_price) -->
+            <div class="sum-sub" id="pfSumNilaiKini" style="color:var(--green);">Nilai kini Rp 0</div>
+          </div>
+          <div class="sum-card">
+            <div class="sum-lbl">ROI</div>
+            <!-- ((nilai_kini - modal) / modal) * 100 -->
+            <div class="sum-val g" id="pfSumRoi">+0%</div>
+            <!-- modal / SUM(gram) -->
+            <div class="sum-sub" id="pfSumAvgCost">Avg. cost Rp —</div>
+          </div>
+        </div>
+
+        <div class="pf-grid">
+          <div class="card">
+            <div class="card-hd">
+              <div class="card-ttl"><svg width="16" height="16"><use href="#ic-bar"/></svg> Breakdown Kepemilikan</div>
+            </div>
+            <!-- Supabase: GROUP BY product
+                 Dirender oleh renderPortfolioBreakdown()
+                 tbody diisi dinamis, tfoot dihitung dari aggregate total -->
+            <!-- Desktop table -->
+            <div class="tbl-wrap pf-tbl-wrap">
+              <table class="tbl">
+                <thead>
+                  <tr><th>Produk</th><th>Gram</th><th>Modal</th><th>Nilai Kini</th><th>Profit</th><th>ROI</th></tr>
+                </thead>
+                <tbody id="pfBreakdownTbody">
+                  <tr><td colspan="6" style="text-align:center;color:var(--t3);padding:24px;">Memuat data...</td></tr>
+                </tbody>
+                <tfoot id="pfBreakdownTfoot">
+                  <tr>
+                    <td>Total</td>
+                    <td id="pfTotalGram">0 gr</td>
+                    <td id="pfTotalModal">Rp 0</td>
+                    <td id="pfTotalNilai">Rp 0</td>
+                    <td id="pfTotalProfit" class="profit-pos">+Rp 0</td>
+                    <td id="pfTotalRoi" class="profit-pos">+0%</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <!-- Mobile card list — dirender oleh renderPortfolioBreakdown() -->
+            <div class="m-card-list pf-cards" style="padding:12px;" id="pfBreakdownCards">
+              <div style="text-align:center;color:var(--t3);padding:24px;font-size:13px;">Memuat data...</div>
+            </div>
+          </div>
+
+          <!-- DONUT CHART
+               Dirender oleh renderDonut() berdasarkan data per produk
+               stroke-dasharray dihitung: (gram/total_gram) * 2πr = (gram/total) * 345.4 -->
+          <div class="card pf-donut-side">
+            <div class="card-hd"><div class="card-ttl">Komposisi</div></div>
+            <div class="donut-wrap">
+              <svg width="150" height="150" viewBox="0 0 150 150" id="donutSvg">
+                <circle cx="75" cy="75" r="55" fill="none" stroke="#E8E4DD" stroke-width="24"/>
+                <!-- Segmen donut dirender dinamis oleh renderDonut() -->
+                <g id="donutSegments"></g>
+                <!-- Label gram total di tengah -->
+                <text id="donutTotalGram" x="75" y="70" text-anchor="middle" font-family="Inter" font-size="20" font-weight="800" fill="#111">0</text>
+                <text x="75" y="86" text-anchor="middle" font-family="Inter" font-size="11" fill="#999">gram</text>
+              </svg>
+              <!-- Legend dirender oleh renderDonut() -->
+              <div class="legend-tbl" id="donutLegend"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════
+           TRANSACTIONS
+           Supabase: SELECT id, date, product, gram, price_per_gram, notes
+           FROM transactions WHERE user_id = auth.uid()
+           ORDER BY date DESC
+           Filter: WHERE product = ? AND date BETWEEN ? AND ?
+           CRUD: INSERT, UPDATE, DELETE via modal dan inline buttons
+           Dirender oleh renderTransactionsTable()
+           ══════════════════════════════════════════════ -->
+      <div class="page" id="pg-transactions">
+        <div class="section-hd">
+          <div>
+            <div class="section-ttl">Transaksi</div>
+            <!-- SELECT COUNT(*) FROM transactions WHERE user_id = auth.uid() -->
+            <p style="color:var(--t2);font-size:13px;margin-top:2px;"><span id="txTotalCount">0</span> transaksi tercatat</p>
+          </div>
+          <button class="btn btn-p" onclick="openModal()">
+            <svg width="13" height="13"><use href="#ic-plus"/></svg> Tambah
+          </button>
+        </div>
+
+        <!-- Filter row — nilai filter dikirim ke renderTransactionsTable() -->
+        <div class="filter-row">
+          <select class="filter-sel" id="txFilterProduct" onchange="applyTxFilter()">
+            <option value="">Semua Produk</option>
+            <option value="antam">Antam</option>
+            <option value="ubs">UBS</option>
+            <option value="galeri24">Galeri24</option>
+            <option value="pegadaian">Pegadaian</option>
+            <option value="treasury">Treasury</option>
+            <option value="emaskita">EmasKita</option>
+          </select>
+          <input type="date" class="filter-sel" id="txFilterFrom" style="min-width:unset;flex:1;" onchange="applyTxFilter()">
+          <input type="date" class="filter-sel" id="txFilterTo" style="min-width:unset;flex:1;" onchange="applyTxFilter()">
+          <button class="btn btn-p btn-sm" onclick="applyTxFilter()">Filter</button>
+        </div>
+
+        <div class="card">
+          <!-- Desktop table — tbody dirender oleh renderTransactionsTable() -->
+          <div class="tbl-wrap tx-tbl-wrap">
+            <table class="tbl">
+              <thead>
+                <tr><th>Tanggal</th><th>Produk</th><th>Gram</th><th>Harga/gr</th><th>Total</th><th>Catatan</th><th>Aksi</th></tr>
+              </thead>
+              <tbody id="txTableBody">
+                <tr><td colspan="7" style="text-align:center;color:var(--t3);padding:24px;">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Mobile card list — dirender oleh renderTransactionsTable() -->
+          <div class="m-card-list tx-cards" style="padding:12px;" id="txCardList">
+            <div style="text-align:center;color:var(--t3);padding:24px;font-size:13px;">Memuat data...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════
+           HARGA EMAS
+           Supabase: SELECT * FROM gold_prices
+           WHERE date >= CURRENT_DATE - 7
+           ORDER BY date DESC
+           Product cards: date = CURRENT_DATE
+           History table: 7 hari terakhir
+           Dirender oleh renderGoldPrices()
+           ══════════════════════════════════════════════ -->
+      <div class="page" id="pg-prices">
+        <div class="section-hd">
+          <div>
+            <div class="section-ttl">Harga Emas Hari Ini</div>
+            <!-- MAX(updated_at) FROM gold_prices WHERE date = CURRENT_DATE -->
+            <p style="color:var(--t2);font-size:13px;margin-top:2px;">Update: <span id="priceLastUpdate">—</span></p>
+          </div>
+          <div class="badge badge-green" style="padding:6px 14px;">
+            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="5" r="4"/></svg>
+            Live
+          </div>
+        </div>
+
+        <!--
+          SUPABASE — Tabel: gold_prices
+          Kolom: id, date, product (gold_product ENUM), sell_price, buyback_price, updated_at
+          Query hari ini:
+            SELECT * FROM gold_prices WHERE date = CURRENT_DATE ORDER BY product
+          Query riwayat + % change:
+            SELECT g1.*, g0.sell_price AS prev_sell,
+              ROUND(((g1.sell_price - g0.sell_price)::numeric / g0.sell_price) * 100, 2) AS pct_change
+            FROM gold_prices g1
+            LEFT JOIN gold_prices g0
+              ON g0.product = g1.product AND g0.date = g1.date - 1
+            WHERE g1.date >= CURRENT_DATE - 7
+            ORDER BY g1.date DESC, g1.product
+        -->
+
+        <!-- 6 PRODUCT CARDS — dirender oleh renderPriceCards() -->
+        <!-- Antam -->
+        <div class="price-main-grid" id="priceMainGrid">
+          <div class="pmc a" id="pmcAntam">
+            <div class="pmc-type"><svg width="13" height="13" fill="none" stroke="#C25000" stroke-width="2"><use href="#ic-gold"/></svg> Antam</div>
+            <div class="pmc-sell" id="pmcAntamSell">Rp —</div>
+            <div class="pmc-label">Harga Jual / gram</div>
+            <div class="pmc-change" id="pmcAntamChange">—</div>
+            <div class="pmc-bb" id="pmcAntamBb">Buyback: Rp —</div>
+            <div class="pmc-spread" id="pmcAntamSpread">Spread: Rp — (—%)</div>
+          </div>
+          <!-- UBS -->
+          <div class="pmc u" id="pmcUbs">
+            <div class="pmc-type"><svg width="13" height="13" fill="none" stroke="#0B3D91" stroke-width="2"><use href="#ic-gold"/></svg> UBS</div>
+            <div class="pmc-sell" id="pmcUbsSell">Rp —</div>
+            <div class="pmc-label">Harga Jual / gram</div>
+            <div class="pmc-change" id="pmcUbsChange">—</div>
+            <div class="pmc-bb" id="pmcUbsBb">Buyback: Rp —</div>
+            <div class="pmc-spread" id="pmcUbsSpread">Spread: Rp — (—%)</div>
+          </div>
+          <!-- Galeri24 -->
+          <div class="pmc g" id="pmcGaleri24">
+            <div class="pmc-type"><svg width="13" height="13" fill="none" stroke="#6A0DAD" stroke-width="2"><use href="#ic-gold"/></svg> Galeri24</div>
+            <div class="pmc-sell" id="pmcGaleri24Sell">Rp —</div>
+            <div class="pmc-label">Harga Jual / gram</div>
+            <div class="pmc-change" id="pmcGaleri24Change">—</div>
+            <div class="pmc-bb" id="pmcGaleri24Bb">Buyback: Rp —</div>
+            <div class="pmc-spread" id="pmcGaleri24Spread">Spread: Rp — (—%)</div>
+          </div>
+          <!-- Pegadaian -->
+          <div class="pmc p" id="pmcPegadaian">
+            <div class="pmc-type"><svg width="13" height="13" fill="none" stroke="#2E7D32" stroke-width="2"><use href="#ic-gold"/></svg> Pegadaian</div>
+            <div class="pmc-sell" id="pmcPegadaianSell">Rp —</div>
+            <div class="pmc-label">Tabungan Emas / gram</div>
+            <div class="pmc-change" id="pmcPegadaianChange">—</div>
+            <div class="pmc-bb" id="pmcPegadaianBb" style="color:#2E7D32;">Buyback: Rp —</div>
+            <div class="pmc-spread" id="pmcPegadaianSpread">Spread: Rp — (—%)</div>
+          </div>
+          <!-- Treasury -->
+          <div class="pmc tr" id="pmcTreasury">
+            <div class="pmc-type"><svg width="13" height="13" fill="none" stroke="#0277BD" stroke-width="2"><use href="#ic-gold"/></svg> Treasury</div>
+            <div class="pmc-sell" id="pmcTreasurySell">Rp —</div>
+            <div class="pmc-label">Harga Jual / gram</div>
+            <div class="pmc-change" id="pmcTreasuryChange">—</div>
+            <div class="pmc-bb" id="pmcTreasuryBb" style="color:#0277BD;">Buyback: Rp —</div>
+            <div class="pmc-spread" id="pmcTreasurySpread">Spread: Rp — (—%)</div>
+          </div>
+          <!-- EmasKita -->
+          <div class="pmc ek" id="pmcEmaskita">
+            <div class="pmc-type"><svg width="13" height="13" fill="none" stroke="#F57F17" stroke-width="2"><use href="#ic-gold"/></svg> EmasKita</div>
+            <div class="pmc-sell" id="pmcEmaskitaSell">Rp —</div>
+            <div class="pmc-label">Harga Jual / gram</div>
+            <div class="pmc-change" id="pmcEmaskitaChange">—</div>
+            <div class="pmc-bb" id="pmcEmaskitaBb" style="color:#F57F17;">Buyback: Rp —</div>
+            <div class="pmc-spread" id="pmcEmaskitaSpread">Spread: Rp — (—%)</div>
+          </div>
+        </div>
+
+        <!-- TABEL RIWAYAT 7 HARI — dirender oleh renderPriceHistoryTable()
+             Query: SELECT date, product, sell_price, buyback_price, prev_sell (dari LEFT JOIN)
+             % change = ((sell_price - prev_sell) / prev_sell) * 100
+             Kelas CSS: chg-pos (naik), chg-neg (turun), chg-flat (tetap) -->
+        <div class="card">
+          <div class="card-hd">
+            <div class="price-history-hd" style="flex:1;">
+              <div class="card-ttl"><svg width="16" height="16"><use href="#ic-list"/></svg> Riwayat Harga — 7 Hari Terakhir</div>
+              <div style="font-size:11px;color:var(--t3);">% = perubahan dari hari sebelumnya</div>
+            </div>
+          </div>
+          <!-- Desktop table -->
+          <div class="tbl-wrap price-tbl-wrap">
+            <table class="tbl" style="min-width:860px;">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Antam Jual</th>
+                  <th>Antam BB</th>
+                  <th>UBS Jual</th>
+                  <th>UBS BB</th>
+                  <th>Galeri24</th>
+                  <th>Pegadaian</th>
+                  <th>Treasury</th>
+                  <th>EmasKita</th>
+                </tr>
+              </thead>
+              <!-- tbody dirender oleh renderPriceHistoryTable() -->
+              <tbody id="priceHistoryTbody">
+                <tr><td colspan="9" style="text-align:center;color:var(--t3);padding:24px;">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mobile cards — dirender oleh renderPriceHistoryCards() -->
+          <div class="m-card-list price-cards" style="padding:12px;" id="priceHistoryCards">
+            <div style="text-align:center;color:var(--t3);padding:24px;font-size:13px;">Memuat data...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════
+           PROFILE
+           Supabase: SELECT full_name, phone, portfolio_name, target_gram, monthly_buy
+           FROM profiles WHERE id = auth.uid()
+           UPDATE profiles SET ... WHERE id = auth.uid()
+           Password: supabase.auth.updateUser({ password })
+           ══════════════════════════════════════════════ -->
+      <div class="page" id="pg-profile">
+        <div class="prof-hero">
+          <!-- Initials dari profiles.full_name -->
+          <div class="prof-av" id="profAvatar">--</div>
+          <div>
+            <!-- profiles.full_name -->
+            <div class="prof-name" id="profName">Memuat...</div>
+            <!-- auth.users.email · "Member sejak" + profiles.created_at (format: MMMM YYYY) -->
+            <div class="prof-sub" id="profSub">— · Member sejak —</div>
+            <div class="prof-stats">
+              <!-- COUNT(*) FROM transactions WHERE user_id = auth.uid() -->
+              <div><div class="ps-n" id="profTxCount">0</div><div class="ps-l">Transaksi</div></div>
+              <!-- SUM(gram) FROM transactions WHERE user_id = auth.uid() -->
+              <div><div class="ps-n" id="profTotalGram">0 gr</div><div class="ps-l">Total Emas</div></div>
+              <!-- ROI % -->
+              <div><div class="ps-n" id="profRoi">0%</div><div class="ps-l">ROI</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="prof-grid">
+          <!-- INFORMASI PRIBADI -->
+          <div class="card">
+            <div class="card-hd"><div class="card-ttl"><svg width="16" height="16"><use href="#ic-user"/></svg> Informasi Pribadi</div></div>
+            <div class="card-bd">
+              <!-- UPDATE profiles SET full_name, phone WHERE id = auth.uid() -->
+              <div class="fg2">
+                <label class="fl2">Nama Lengkap</label>
+                <!-- profiles.full_name -->
+                <input class="fi2" id="profInputName" placeholder="Nama Lengkap">
+              </div>
+              <div class="fg2">
+                <label class="fl2">Email</label>
+                <!-- auth.users.email (read-only) -->
+                <input class="fi2" id="profInputEmail" type="email" placeholder="email@domain.com" readonly style="opacity:.6;cursor:not-allowed;">
+              </div>
+              <div class="fg2">
+                <label class="fl2">No. Telepon</label>
+                <!-- profiles.phone -->
+                <input class="fi2" id="profInputPhone" placeholder="+62 8xx xxxx xxxx">
+              </div>
+              <button class="btn btn-p" style="width:100%;justify-content:center;" onclick="saveProfile()">Simpan Perubahan</button>
+            </div>
+          </div>
+
+          <!-- TARGET PORTOFOLIO -->
+          <div class="card">
+            <div class="card-hd"><div class="card-ttl"><svg width="16" height="16"><use href="#ic-target"/></svg> Target Portofolio</div></div>
+            <div class="card-bd">
+              <!-- UPDATE profiles SET portfolio_name, target_gram, monthly_buy WHERE id = auth.uid() -->
+              <div class="fg2">
+                <label class="fl2">Nama Portofolio</label>
+                <!-- profiles.portfolio_name -->
+                <input class="fi2" id="profInputPortfolioName" placeholder="Portofolio Utama">
+              </div>
+              <div class="fg2">
+                <label class="fl2">Target Gram</label>
+                <!-- profiles.target_gram -->
+                <input class="fi2" type="number" id="profInputTargetGram" placeholder="25" min="0" step="0.01">
+              </div>
+              <div class="fg2">
+                <label class="fl2">Estimasi Beli/Bulan (gram)</label>
+                <!-- profiles.monthly_buy -->
+                <input class="fi2" type="number" id="profInputMonthlyBuy" placeholder="1" step="0.1" min="0">
+              </div>
+              <button class="btn btn-p" style="width:100%;justify-content:center;" onclick="saveProfileTarget()">Update Target</button>
+            </div>
+          </div>
+
+          <!-- KEAMANAN AKUN -->
+          <div class="card prof-full">
+            <div class="card-hd"><div class="card-ttl"><svg width="16" height="16"><use href="#ic-shield"/></svg> Keamanan Akun</div></div>
+            <div class="card-bd">
+              <div class="form-row col2">
+                <div>
+                  <!-- supabase.auth.updateUser({ password: newPassword })
+                       Validasi: current password tidak dicek via Supabase (re-auth dulu jika perlu) -->
+                  <div class="fg2">
+                    <label class="fl2">Password Saat Ini</label>
+                    <input class="fi2" type="password" id="profCurrentPassword" placeholder="••••••••">
+                  </div>
+                  <div class="fg2">
+                    <label class="fl2">Password Baru</label>
+                    <input class="fi2" type="password" id="profNewPassword" placeholder="••••••••">
+                  </div>
+                  <div class="fg2">
+                    <label class="fl2">Konfirmasi Password</label>
+                    <input class="fi2" type="password" id="profConfirmPassword" placeholder="••••••••">
+                  </div>
+                  <button class="btn btn-p" onclick="changePassword()">Ganti Password</button>
+                </div>
+                <div class="sec-status-block" style="background:var(--bg);border-radius:var(--r2);padding:18px;display:flex;flex-direction:column;gap:12px;">
+                  <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Status Keamanan</div>
+                  <!-- supabase.auth.getUser() → user.email_confirmed_at != null -->
+                  <div style="display:flex;align-items:center;gap:9px;font-size:13px;" id="secEmailVerified">
+                    <svg width="14" height="14" fill="none" stroke="var(--green)" stroke-width="2.5"><use href="#ic-check"/></svg> Email Terverifikasi
+                  </div>
+                  <div style="display:flex;align-items:center;gap:9px;font-size:13px;">
+                    <svg width="14" height="14" fill="none" stroke="var(--green)" stroke-width="2.5"><use href="#ic-check"/></svg> Supabase Auth Aktif
+                  </div>
+                  <div style="display:flex;align-items:center;gap:9px;font-size:13px;">
+                    <svg width="14" height="14" fill="none" stroke="var(--green)" stroke-width="2.5"><use href="#ic-check"/></svg> Row Level Security ON
+                  </div>
+                  <div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--t3);">
+                    <svg width="14" height="14" fill="none" stroke="var(--t3)" stroke-width="2"><circle cx="7" cy="7" r="6"/></svg> 2FA (Coming Soon)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div>
+</div><!-- /app -->
+
+<!-- ══════════════════════════════════════════════
+     MODAL TAMBAH / EDIT TRANSAKSI
+     Mode: 'add' → INSERT INTO transactions
+           'edit' → UPDATE transactions SET ... WHERE id = editingTxId
+     Supabase: transactions (user_id, date, product, gram, price_per_gram, notes)
+     ══════════════════════════════════════════════ -->
+<div class="modal-ov" id="modalOv">
+  <div class="modal">
+    <div class="modal-hd">
+      <!-- Judul berubah antara "Tambah Transaksi" dan "Edit Transaksi" -->
+      <h3 id="modalTitle">Tambah Transaksi</h3>
+      <p id="modalSubtitle">Catat pembelian emas baru Anda</p>
+    </div>
+    <div class="modal-bd">
+      <!-- Field tersembunyi: menyimpan ID transaksi saat mode edit -->
+      <input type="hidden" id="mTxId">
+      <div class="form-row col2">
+        <div class="fg2">
+          <label class="fl2">Tanggal Beli</label>
+          <!-- transactions.date (format: YYYY-MM-DD) -->
+          <input class="fi2" type="date" id="mDate">
+        </div>
+        <div class="fg2">
+          <label class="fl2">Produk Emas</label>
+          <!-- transactions.product (gold_product ENUM)
+               Opsi harga: diisi dari gold_prices WHERE date = CURRENT_DATE
+               onchange: update mPrice dari gold_prices.sell_price dan hitung ulang mTotal -->
+          <select class="fi2" id="mProd" onchange="onModalProductChange()">
+            <option value="antam">Antam</option>
+            <option value="ubs">UBS</option>
+            <option value="galeri24">Galeri24</option>
+            <option value="pegadaian">Pegadaian (Tabungan Emas)</option>
+            <option value="treasury">Treasury</option>
+            <option value="emaskita">EmasKita</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row col2">
+        <div class="fg2">
+          <label class="fl2">Jumlah Gram</label>
+          <!-- transactions.gram (NUMERIC 10,4) -->
+          <input class="fi2" type="number" id="mGram" placeholder="contoh: 1.5" step="0.0001" min="0" oninput="updateTotal()">
+        </div>
+        <div class="fg2">
+          <label class="fl2">Harga Beli/gram</label>
+          <!-- transactions.price_per_gram (BIGINT)
+               Default: gold_prices.sell_price untuk produk & tanggal dipilih -->
+          <input class="fi2" type="number" id="mPrice" placeholder="0" min="0" oninput="updateTotal()">
+        </div>
+      </div>
+      <div class="fg2">
+        <label class="fl2">Catatan (opsional)</label>
+        <!-- transactions.notes -->
+        <textarea class="fi2" id="mNotes" placeholder="contoh: DCA bulan Juni, beli di dip..."></textarea>
+      </div>
+      <div class="modal-total">
+        <div class="modal-total-row">
+          <span style="color:var(--t2);font-size:13px;">Total Bayar</span>
+          <!-- gram * price_per_gram -->
+          <span style="font-weight:800;font-size:15px;color:var(--c);" id="mTotal">Rp —</span>
+        </div>
+        <div class="modal-total-row" style="margin-top:6px;">
+          <span style="font-size:12px;color:var(--t3);">Harga pasar saat ini</span>
+          <!-- gold_prices.sell_price WHERE product = mProd AND date = CURRENT_DATE -->
+          <span style="font-size:12px;font-weight:600;" id="mMarketPrice">Rp — / gr</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-s" style="flex:1;justify-content:center;" onclick="closeModal()">Batal</button>
+      <!-- onclick: mode 'add' → saveTransaction(), mode 'edit' → updateTransaction() -->
+      <button class="btn btn-p" style="flex:2;justify-content:center;" id="modalSaveBtn" onclick="saveTransaction()">Simpan Transaksi</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg width="15" height="15" fill="none" stroke="#fff" stroke-width="2.5"><use href="#ic-check"/></svg>
+  <span id="toastMsg">Berhasil disimpan</span>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

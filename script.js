@@ -1022,16 +1022,12 @@ async function deleteTransaction(id) {
  * SELECT * FROM gold_prices WHERE date >= CURRENT_DATE - 7 ORDER BY date DESC, product
  */
 async function fetchGoldPrices() {
-  const today = new Date().toISOString().split('T')[0];
-  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-
   const { data, error } = await db
     .from('gold_prices')
     .select('*')
-    .gte('date', sevenDaysAgo)
-    .lte('date', today)
     .order('date', { ascending: false })
-    .order('product', { ascending: true });
+    .order('product', { ascending: true })
+    .limit(50);
 
   if (error) {
     console.error('fetchGoldPrices error:', error.message);
@@ -1039,6 +1035,23 @@ async function fetchGoldPrices() {
   }
 
   STATE.goldPrices = data || [];
+
+  // Ambil tanggal terbaru dari data (bukan dari browser)
+  const latestDate = data && data.length > 0 ? data[0].date : null;
+
+  STATE.todayPrices = {};
+  if (latestDate) {
+    data.forEach(row => {
+      if (row.date === latestDate) {
+        STATE.todayPrices[row.product] = {
+          sell_price:    row.sell_price,
+          buyback_price: row.buyback_price,
+          updated_at:    row.updated_at,
+        };
+      }
+    });
+  }
+}
 
   // Build todayPrices map
   STATE.todayPrices = {};

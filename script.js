@@ -1064,7 +1064,6 @@ async function fetchGoldPrices() {
       };
     }
   });
-
 function renderPriceCards() {
   const products = ['antam', 'ubs', 'galeri24', 'pegadaian', 'treasury', 'emaskita'];
   const idMap = { antam: 'Antam', ubs: 'Ubs', galeri24: 'Galeri24', pegadaian: 'Pegadaian', treasury: 'Treasury', emaskita: 'Emaskita' };

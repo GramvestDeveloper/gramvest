@@ -267,27 +267,17 @@ async function doRegister() {
  * db.auth.signOut()
  */
 async function doLogout() {
-  const logoutBtn = document.querySelector('.sb-logout');
-  if (logoutBtn) {
-    logoutBtn.innerHTML = '<div class="logout-spinner"></div>';
-    logoutBtn.style.pointerEvents = 'none';
-  }
-
-  await new Promise(r => setTimeout(r, 900));
   await db.auth.signOut();
-
   STATE.user         = null;
   STATE.profile      = null;
   STATE.transactions = [];
   STATE.goldPrices   = [];
   STATE.todayPrices  = {};
 
-  document.getElementById('loginEmail').value    = '';
-  document.getElementById('loginPassword').value = '';
-  document.getElementById('app').style.display       = 'none';
+  document.getElementById('app').style.display      = 'none';
   document.getElementById('loginPage').style.display = 'flex';
-  switchAuthTab('login');
 }
+
 /* ─────────────────────────────────────────────────────────────
    [5] NAVIGATION & UI SHELL
    ───────────────────────────────────────────────────────────── */
@@ -1022,12 +1012,16 @@ async function deleteTransaction(id) {
  * SELECT * FROM gold_prices WHERE date >= CURRENT_DATE - 7 ORDER BY date DESC, product
  */
 async function fetchGoldPrices() {
+  const today = new Date().toISOString().split('T')[0];
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
   const { data, error } = await db
     .from('gold_prices')
     .select('*')
+    .gte('date', sevenDaysAgo)
+    .lte('date', today)
     .order('date', { ascending: false })
-    .order('product', { ascending: true })
-    .limit(50);
+    .order('product', { ascending: true });
 
   if (error) {
     console.error('fetchGoldPrices error:', error.message);
@@ -1035,23 +1029,6 @@ async function fetchGoldPrices() {
   }
 
   STATE.goldPrices = data || [];
-
-  // Ambil tanggal terbaru dari data (bukan dari browser)
-  const latestDate = data && data.length > 0 ? data[0].date : null;
-
-  STATE.todayPrices = {};
-  if (latestDate) {
-    data.forEach(row => {
-      if (row.date === latestDate) {
-        STATE.todayPrices[row.product] = {
-          sell_price:    row.sell_price,
-          buyback_price: row.buyback_price,
-          updated_at:    row.updated_at,
-        };
-      }
-    });
-  }
-}
 
   // Build todayPrices map
   STATE.todayPrices = {};
@@ -1064,6 +1041,8 @@ async function fetchGoldPrices() {
       };
     }
   });
+}
+
 function renderPriceCards() {
   const products = ['antam', 'ubs', 'galeri24', 'pegadaian', 'treasury', 'emaskita'];
   const idMap = { antam: 'Antam', ubs: 'Ubs', galeri24: 'Galeri24', pegadaian: 'Pegadaian', treasury: 'Treasury', emaskita: 'Emaskita' };
@@ -1527,46 +1506,27 @@ async function init() {
 
   if (session) {
     STATE.user = session.user;
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('app').style.display       = 'block';
     await bootApp();
   } else {
     document.getElementById('loginPage').style.display = 'flex';
     document.getElementById('app').style.display       = 'none';
   }
 
+  // Listener untuk perubahan auth state (login/logout dari tab lain)
   db.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session) {
       STATE.user = session.user;
-      document.getElementById('loginPage').style.display = 'none';
-      document.getElementById('app').style.display       = 'block';
       await bootApp();
     } else if (event === 'SIGNED_OUT') {
-  STATE.user         = null;
-  STATE.profile      = null;
-  STATE.transactions = [];
-  STATE.goldPrices   = [];
-  STATE.todayPrices  = {};
-
-  // Bersihkan form
-  const emailEl = document.getElementById('loginEmail');
-  const passEl  = document.getElementById('loginPassword');
-  if (emailEl) emailEl.value = '';
-  if (passEl)  passEl.value  = '';
-
-  document.getElementById('app').style.display       = 'none';
-  document.getElementById('loginPage').style.display = 'flex';
-  switchAuthTab('login');
-}
+      STATE.user         = null;
+      STATE.profile      = null;
+      STATE.transactions = [];
+      STATE.goldPrices   = [];
+      STATE.todayPrices  = {};
+      document.getElementById('app').style.display       = 'none';
+      document.getElementById('loginPage').style.display = 'flex';
+    }
   });
-
-  const modalOv = document.getElementById('modalOv');
-  if (modalOv) {
-    modalOv.addEventListener('click', function (e) {
-      if (e.target === this) closeModal();
-    });
-  }
-}
 
   // Tutup modal saat klik overlay
   const modalOv = document.getElementById('modalOv');
@@ -1575,6 +1535,8 @@ async function init() {
       if (e.target === this) closeModal();
     });
   }
+}
+
 // Jalankan init setelah DOM siap
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);

@@ -1012,7 +1012,14 @@ async function deleteTransaction(id) {
  * SELECT * FROM gold_prices WHERE date >= CURRENT_DATE - 7 ORDER BY date DESC, product
  */
 async function fetchGoldPrices() {
-  const today = new Date().toISOString().split('T')[0];
+  const now = new Date();
+
+const today =
+  now.getFullYear() +
+  '-' +
+  String(now.getMonth() + 1).padStart(2, '0') +
+  '-' +
+  String(now.getDate()).padStart(2, '0');
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
   const { data, error } = await db
